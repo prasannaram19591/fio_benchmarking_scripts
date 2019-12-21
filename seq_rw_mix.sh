@@ -24,7 +24,7 @@ do
 
         RIOPSUNIT=`grep -w read seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep IOPS | awk -F "=" '{ print $2 }' | awk -F "," '{ print $1}' | rev | cut -b 1-1`
 
-        if [ "$RIOPSUNIT" == "rpr" ]; then
+        if [ "$RIOPSUNIT" == "k" ]; then
                 RIOPS=`grep -w read seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep IOPS | awk -F "=" '{ print $2 }' | awk -F "," '{ print $1}' | rev | cut -b 2-7 | rev`
                 RIOPS=`calc $RIOPS*1000`
         elif [ "$RIOPSUNIT" == "m" ]; then
@@ -34,7 +34,7 @@ do
 
         WIOPSUNIT=`grep -w write seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep IOPS | awk -F "=" '{ print $2 }' | awk -F "," '{ print $1}' | rev | cut -b 1-1`
 
-        if [ "$WIOPSUNIT" == "rpr" ]; then
+        if [ "$WIOPSUNIT" == "k" ]; then
                 WIOPS=`grep -w write seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep IOPS | awk -F "=" '{ print $2 }' | awk -F "," '{ print $1}' | rev | cut -b 2-7 | rev`
                 WIOPS=`calc $WIOPS*1000`
         elif [ "$RIOPSUNIT" == "m" ]; then
