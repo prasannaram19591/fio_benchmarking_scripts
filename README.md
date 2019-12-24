@@ -9,5 +9,6 @@ Pre-requisites
   4.  Input various thread ex (1, 2, 4) one per line and save it as threads.csv
   5.  Input various read percentages ex (75, 50, 25) one per line and save it as percentage.csv
   6.  Save all the csv and the sh files in a directory
-  7.  Run the script by ./seq_rw_mix.sh for sequential workload bench-marking and reporting
-  8.  Run the script by ./rand_rw_mix.sh for random workload bench-marking and reporting
+  7.  Change the file permissions to executable by chmod +x seq_rw_mix.sh rand_rw_mix.sh
+  8.  Run the script by ./seq_rw_mix.sh for sequential workload bench-marking and reporting
+  9.  Run the script by ./rand_rw_mix.sh for random workload bench-marking and reporting
