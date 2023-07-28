@@ -57,12 +57,27 @@ do
                 WBWPS=`calc $WBWPS/1024`
         fi
 
-        echo $rpr,$wpr,$bs,$ds,$tr,$RIOPS,$RBWPS,$WIOPS,$WBWPS,$FIOCMD >> randrwmix_report.csv
-        rm -f rm -f randrwmix-r-*-w-*-bs-*-ds-*-tr-*.*.0
+        RLAT=`grep lat randrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep -vE 'slat|clat' | grep min | awk '{print $5}' | awk -F "=" '{print $NF}' | sed 's/,//g' | head -n 1`
+        WLAT=`grep lat randrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep -vE 'slat|clat' | grep min | awk '{print $5}' | awk -F "=" '{print $NF}' | sed 's/,//g' | tail -n 1`
+        
+        RLATUNIT=`grep lat randrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep -vE 'slat|clat' | grep min | awk '{print $2}' | sed 's/[():]//g' | head -n 1`
+
+        if [ "$RLATUNIT" == "usec" ]; then
+                RLAT=`calc $RLAT/1000`
+        fi
+
+        WLATUNIT=`grep lat randrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep -vE 'slat|clat' | grep min | awk '{print $2}' | sed 's/[():]//g' | tail -n 1`
+
+        if [ "$WLATUNIT" == "usec" ]; then
+                WLAT=`calc $WLAT/1000`
+        fi
+        
+        echo $rpr,$wpr,$bs,$ds,$tr,$RIOPS,$RBWPS,$RLAT,$WIOPS,$WBWPS,$WLAT,$FIOCMD >> randrwmix_report.csv
+        rm -f randrwmix-r-*-w-*-bs-*-ds-*-tr-*.*.0
       done
       echo >> randrwmix_report.csv
     done
   done
 done
 
-sed -i '1iRead_perc,Write_perc,Block_size,Data_size,Threads,Read_IOPS,Read_BW(MB),Write_IOPS,Write_BW(MB),FIO_Commands' randrwmix_report.csv
+sed -i '1iRead_perc,Write_perc,Block_size,Data_size,Threads,Read_IOPS,Read_BW(MB),Read_Lat(ms),Write_IOPS,Write_BW(MB),Write_Lat(ms),FIO_Commands' randrwmix_report.csv
