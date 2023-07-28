@@ -14,10 +14,10 @@ do
       do
         wpr=`calc 100-$rpr`
         echo Running sequential fio job on a $ds size of data with $bs block size having $tr threads for $rpr percent read and $wpr percent write..
-		
-        FIOCMD=`echo fio --name=seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr --rw=rw --rwmixread=$rpr --direct=1 --ioengine=libaio --bs=$bs --numjobs=$tr --size=$ds --group_reporting`
 
-        fio --name=seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr --rw=rw --rwmixread=$rpr --direct=1 --ioengine=libaio --bs=$bs --numjobs=$tr --size=$ds --group_reporting > seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt
+        FIOCMD=`echo fio --name=seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr --rw=rw --rwmixread=$rpr --direct=1 --ioengine=libaio --bs=$bs --numjobs=$tr --size=$ds --iodepth=64 --group_reporting`
+
+        fio --name=seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr --rw=rw --rwmixread=$rpr --direct=1 --ioengine=libaio --bs=$bs --numjobs=$tr --size=$ds --iodepth=64 --group_reporting > seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt
 
         RIOPS=`grep -w read seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep IOPS | awk -F "=" '{ print $2 }' | awk -F "," '{ print $1}'`
         WIOPS=`grep -w write seqrwmix-r-$rpr-w-$wpr-bs-$bs-ds-$ds-tr-$tr.txt | grep IOPS | awk -F "=" '{ print $2 }' | awk -F "," '{ print $1}'`
@@ -58,6 +58,7 @@ do
         fi
 
         echo $rpr,$wpr,$bs,$ds,$tr,$RIOPS,$RBWPS,$WIOPS,$WBWPS,$FIOCMD >> seqrwmix_report.csv
+        rm -f seqrwmix-r-*-w-*-bs-*-ds-*-tr-*.*.0
       done
       echo >> seqrwmix_report.csv
     done
